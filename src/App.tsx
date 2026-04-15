@@ -21,7 +21,6 @@ import { OrderHistory } from "./components/OrderHistory";
 import { UserProfile } from "./components/UserProfile";
 import { LanguageGate } from "./components/LanguageGate";
 import { GDPRBanner } from "./components/GDPRBanner";
-import { useTranslation } from "react-i18next";
 import { GelatoGallery } from "./components/GelatoGallery";
 
 type View = "menu" | "history" | "profile" | "checkout";
