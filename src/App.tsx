@@ -120,7 +120,7 @@ export default function App() {
   const [view, setView] = useState<View>("menu");
   const [beachDelivery, setBeachDelivery] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   return (
     <>
