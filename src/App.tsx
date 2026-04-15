@@ -22,6 +22,7 @@ import { UserProfile } from "./components/UserProfile";
 import { LanguageGate } from "./components/LanguageGate";
 import { GDPRBanner } from "./components/GDPRBanner";
 import { useTranslation } from "react-i18next";
+import { GelatoGallery } from "./components/GelatoGallery";
 
 type View = "menu" | "history" | "profile" | "checkout";
 
@@ -79,14 +80,46 @@ const FLAVORS = [
     price: 6.5,
     description:
       "L'iconico gusto di Tropea: cipolla rossa caramellata e cioccolato 70%.",
-    image:
-      "https://www.chiselandfork.com/wp-content/uploads/2022/08/chocolate-oreo-ice-cream-1.jpg",
+    image: "/gelato2.jpg",
+  },
+  {
+    id: 3,
+    name: "Wild Berry",
+    price: 5.5,
+    description:
+      "Un mix di frutti di bosco selvatici raccolti sulle colline calabresi.",
+    image: "/gelato1.jpg",
+  },
+  {
+    id: 4,
+    name: "Lemon Zest",
+    price: 4.0,
+    description:
+      "Fresco e agrumato, con scorze di limone di Sicilia per un tocco in più.",
+    image: "/pistacchio.jpg",
+  },
+  {
+    id: 5,
+    name: "Salted Caramel",
+    price: 5.0,
+    description:
+      "Dolce e salato in perfetto equilibrio, con caramello fatto in casa.",
+    image: "/gelato4.jpg",
+  },
+  {
+    id: 6,
+    name: "Coffee Swirl",
+    price: 4.5,
+    description:
+      "Per gli amanti del caffè, con un intenso aroma di espresso e una spirale di cioccolato fondente.",
+    image: "/gelato1.jpg",
   },
 ];
 
 export default function App() {
   const [view, setView] = useState<View>("menu");
   const [beachDelivery, setBeachDelivery] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const { t } = useTranslation();
 
   return (
@@ -121,66 +154,70 @@ export default function App() {
         <main className="px-6 space-y-8">
           {view === "menu" && (
             <div className="space-y-8 animate-in fade-in duration-500">
-              {/* HERO SECTION */}
-              <div className="relative rounded-[2.5rem] overflow-hidden h-48">
-                <img
-                  src={"https://static.winenews.it/2018/08/GelatoMare.jpg"}
-                  alt="Hero Gelato"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#8B2132]/80 to-transparent flex flex-col justify-end p-6 text-white">
-                  <p className="text-[10px] uppercase font-bold tracking-widest opacity-80">
-                    Sun-kissed sweetness
-                  </p>
-                  <h2 className="text-xl font-bold">
-                    Artisanal Gelato <br /> delivered to your spot.
-                  </h2>
-                </div>
-              </div>
-
-              {/* BEACH TOGGLE */}
-              <div
-                className={`p-5 rounded-[2rem] flex justify-between items-center border transition-all ${beachDelivery ? "bg-[#FFB347]/10 border-[#FFB347]/30" : "bg-white border-transparent"}`}
-              >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`p-2 rounded-full ${beachDelivery ? "bg-[#FFB347] text-white" : "bg-gray-100 text-gray-400"}`}
-                  >
-                    <Umbrella size={20} />
-                  </div>
-                  <div>
-                    <Label className="font-bold">Delivery to Beach</Label>
-                    <p className="text-[10px] text-gray-400 uppercase">
-                      Tropea Coastline
-                    </p>
-                  </div>
-                </div>
-                <Switch
-                  checked={beachDelivery}
-                  onCheckedChange={setBeachDelivery}
-                />
-              </div>
-
-              {/* LISTA GUSTI */}
-              <section className="space-y-4">
-                <div className="flex justify-between items-end">
-                  <h3 className="text-2xl font-bold">Daily Selection</h3>
-                  <button className="text-[#8B2132] text-xs font-bold underline">
-                    See all
-                  </button>
-                </div>
-                <div className="flex gap-4 overflow-x-auto no-scrollbar -mx-6 px-6 pb-4">
-                  {FLAVORS.map((flavor) => (
-                    <GelatoCard
-                      key={flavor.id}
-                      name={flavor.name}
-                      price={flavor.price}
-                      description={flavor.description}
-                      image={flavor.image}
+              {showAll ? (
+                <GelatoGallery onBack={() => setShowAll(false)} />
+              ) : (
+                <>
+                  <div className="relative rounded-[2.5rem] overflow-hidden h-48">
+                    <img
+                      src={"https://static.winenews.it/2018/08/GelatoMare.jpg"}
+                      alt="Hero Gelato"
+                      className="w-full h-full object-cover"
                     />
-                  ))}
-                </div>
-              </section>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#8B2132]/80 to-transparent flex flex-col justify-end p-6 text-white">
+                      <p className="text-[10px] uppercase font-bold tracking-widest opacity-80">
+                        Sun-kissed sweetness
+                      </p>
+                      <h2 className="text-xl font-bold">
+                        Artisanal Gelato <br /> delivered to your spot.
+                      </h2>
+                    </div>
+                  </div>
+                  <div
+                    className={`p-5 rounded-[2rem] flex justify-between items-center border transition-all ${beachDelivery ? "bg-[#FFB347]/10 border-[#FFB347]/30" : "bg-white border-transparent"}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`p-2 rounded-full ${beachDelivery ? "bg-[#FFB347] text-white" : "bg-gray-100 text-gray-400"}`}
+                      >
+                        <Umbrella size={20} />
+                      </div>
+                      <div>
+                        <Label className="font-bold">Delivery to Beach</Label>
+                        <p className="text-[10px] text-gray-400 uppercase">
+                          Tropea Coastline
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={beachDelivery}
+                      onCheckedChange={setBeachDelivery}
+                    />
+                  </div>
+                  <section className="space-y-4">
+                    <div className="flex justify-between items-end">
+                      <h3 className="text-2xl font-bold">Daily Selection</h3>
+                      <button
+                        onClick={() => setShowAll(true)}
+                        className="text-[#8B2132] text-xs font-bold underline"
+                      >
+                        See all
+                      </button>
+                    </div>
+                    <div className="flex gap-4 overflow-x-auto no-scrollbar -mx-6 px-6 pb-4">
+                      {FLAVORS.map((flavor) => (
+                        <GelatoCard
+                          key={flavor.id}
+                          name={flavor.name}
+                          price={flavor.price}
+                          description={flavor.description}
+                          image={flavor.image}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                </>
+              )}
             </div>
           )}
 
