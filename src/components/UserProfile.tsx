@@ -1,12 +1,5 @@
 // src/components/UserProfile.tsx
-import {
-  User,
-  MapPin,
-  CreditCard,
-  Bell,
-  LogOut,
-  ChevronRight,
-} from "lucide-react";
+import { MapPin, CreditCard, Bell, LogOut, ChevronRight } from "lucide-react";
 
 export function UserProfile() {
   const settings = [

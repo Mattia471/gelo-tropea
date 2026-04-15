@@ -1,5 +1,4 @@
 import { Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface GelatoCardProps {
   name: string;

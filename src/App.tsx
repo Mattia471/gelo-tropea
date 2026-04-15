@@ -199,9 +199,9 @@ export default function App() {
                 </h4>
                 <PaymentSelection
                   selected={"stripe"}
-                  onChange={function (value: "stripe" | "cash"): void {
-                    throw new Error("Function not implemented.");
-                  }}
+                  onChange={(value) =>
+                    console.log("Selected payment method:", value)
+                  }
                 />
               </section>
 
