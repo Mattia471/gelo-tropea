@@ -51,7 +51,7 @@ export function GelatoGallery({ onBack }: GelatoGalleryProps) {
             {/* Immagine */}
             <div className="relative h-36 rounded-[1.5rem] mb-3 overflow-hidden">
               <img
-                src={item.image}
+                src={item.image_url}
                 alt={item.name}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />

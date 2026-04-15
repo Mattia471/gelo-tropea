@@ -159,14 +159,14 @@ export default function App() {
                       </button>
                     </div>
                     <div className="flex gap-4 overflow-x-auto no-scrollbar -mx-6 px-6 pb-4">
-                      {products.map((flavor) => (
+                      {products.map((item) => (
                         <GelatoCard
-                          onAdd={() => addToCart(flavor)}
-                          key={flavor.id}
-                          name={flavor.name}
-                          price={flavor.price}
-                          description={flavor.description}
-                          image={flavor.image}
+                          onAdd={() => addToCart(item)}
+                          key={item.id}
+                          name={item.name}
+                          price={item.price}
+                          description={item.description}
+                          image={item.image_url}
                         />
                       ))}
                     </div>
