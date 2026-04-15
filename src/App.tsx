@@ -19,6 +19,9 @@ import { GelatoCard } from "@/components/GelatoCard";
 import { PaymentSelection } from "@/components/PaymentSelection";
 import { OrderHistory } from "./components/OrderHistory";
 import { UserProfile } from "./components/UserProfile";
+import { LanguageGate } from "./components/LanguageGate";
+import { GDPRBanner } from "./components/GDPRBanner";
+import { useTranslation } from "react-i18next";
 
 type View = "menu" | "history" | "profile" | "checkout";
 
@@ -84,10 +87,13 @@ const FLAVORS = [
 export default function App() {
   const [view, setView] = useState<View>("menu");
   const [beachDelivery, setBeachDelivery] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <>
       <DesktopBlocker />
+      <LanguageGate />
+      <GDPRBanner />
       <div className="min-h-screen bg-[#FDFCF0] text-[#2D1414] max-w-md mx-auto relative pb-24 shadow-2xl font-sans">
         {/* HEADER */}
         <header className="p-6 flex justify-between items-center sticky top-0 bg-[#FDFCF0]/80 backdrop-blur-md z-50">
