@@ -8,7 +8,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Aggiorna questo per evitare l'errore TS5107 */
+    /* Modern Bundler Mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -23,11 +23,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Alias e Fix Deprecazioni */
-    "baseUrl": ".",
+    /* Alias Configuration - NOTA: baseUrl è rimosso */
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    /* Questo DEVE essere qui per silenziare ogni altro warning */
+    "ignoreDeprecations": "6.0"
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
 }
