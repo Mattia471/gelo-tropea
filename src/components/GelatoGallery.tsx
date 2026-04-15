@@ -1,52 +1,15 @@
 // src/components/GelatoGallery.tsx (Contenuto aggiornato)
+import { useCart } from "@/context/CartContext";
+import { useProducts } from "@/hooks/useProducts";
 import { ArrowLeft, Search, Plus } from "lucide-react";
 
 interface GelatoGalleryProps {
   onBack: () => void;
 }
 
-const ALL_GELATOS = [
-  {
-    id: 1,
-    name: "Classic Pistachio",
-    price: 4.5,
-    // Usiamo il link generato per coerenza
-    image: "/gelato1.jpg",
-  },
-  {
-    id: 2,
-    name: "Tropea Dark Soul",
-    price: 6.5,
-    image: "/gelato2.jpg",
-  },
-  {
-    id: 3,
-    name: "Wild Berry",
-    price: 5.5,
-    // Un placeholder realistico
-    image: "/gelato1.jpg",
-  },
-  {
-    id: 4,
-    name: "Lemon Zest",
-    price: 4.0,
-    image: "/pistacchio.jpg",
-  },
-  {
-    id: 5,
-    name: "Salted Caramel",
-    price: 5.0,
-    image: "/gelato2.jpg",
-  },
-  {
-    id: 6,
-    name: "Coffee Swirl",
-    price: 4.5,
-    image: "/gelato1.jpg",
-  },
-];
-
 export function GelatoGallery({ onBack }: GelatoGalleryProps) {
+  const { addToCart } = useCart();
+  const { products } = useProducts();
   return (
     <div className="animate-in slide-in-from-bottom-10 duration-500 bg-[#FDFCF0] min-h-screen">
       {/* Header Galleria */}
@@ -80,7 +43,7 @@ export function GelatoGallery({ onBack }: GelatoGalleryProps) {
       <div className="grid grid-cols-2 gap-4 pb-20">
         {" "}
         {/* pb-20 per non coprire l'ultimo gelato con la Nav */}
-        {ALL_GELATOS.map((item) => (
+        {products.map((item) => (
           <div
             key={item.id}
             className="bg-white p-3 rounded-[2rem] shadow-sm border border-black/5 flex flex-col group active:scale-[0.98] transition-all hover:shadow-xl"
@@ -102,9 +65,12 @@ export function GelatoGallery({ onBack }: GelatoGalleryProps) {
               <h4 className="font-bold text-sm text-[#2D1414] truncate mb-3">
                 {item.name}
               </h4>
-              <button className="w-full h-10 bg-[#8B2132] hover:bg-[#6b1a26] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-all active:scale-95 shadow-sm">
+              <button
+                onClick={() => addToCart(item)}
+                className="w-full h-10 bg-[#8B2132] hover:bg-[#6b1a26] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-all active:scale-95 shadow-sm"
+              >
                 <Plus size={14} />
-                Add
+                Add to Cart
               </button>
             </div>
           </div>

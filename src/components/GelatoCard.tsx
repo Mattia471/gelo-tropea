@@ -41,7 +41,7 @@ export function GelatoCard({
           className="mt-6 w-full bg-[#8B2132] hover:bg-[#6b1a26] text-white h-14 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-[#8B2132]/20"
         >
           <Plus size={20} />
-          Add to Order
+          Add to Cart
         </button>
       </div>
     </div>

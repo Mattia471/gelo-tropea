@@ -6,6 +6,7 @@ import {
   History,
   User,
   Umbrella,
+  Loader2,
 } from "lucide-react";
 
 // UI Components da Shadcn
@@ -22,6 +23,9 @@ import { UserProfile } from "./components/UserProfile";
 import { LanguageGate } from "./components/LanguageGate";
 import { GDPRBanner } from "./components/GDPRBanner";
 import { GelatoGallery } from "./components/GelatoGallery";
+import { useCart } from "./context/CartContext";
+import { createOrder } from "./lib/orders";
+import { useProducts } from "./hooks/useProducts";
 
 type View = "menu" | "history" | "profile" | "checkout";
 
@@ -119,8 +123,11 @@ export default function App() {
   const [view, setView] = useState<View>("menu");
   const [beachDelivery, setBeachDelivery] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const { cart, totalPrice, clearCart, addToCart } = useCart();
+  const [loading, setLoading] = useState(false);
+  const { products } = useProducts();
   // const { t } = useTranslation();
-
+  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   return (
     <>
       <DesktopBlocker />
@@ -145,7 +152,7 @@ export default function App() {
           >
             <ShoppingBag className="text-[#8B2132]" size={20} />
             <Badge className="absolute -top-1 -right-1 bg-[#FFB347] p-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px]">
-              1
+              {cartCount > 0 && cartCount}
             </Badge>
           </Button>
         </header>
@@ -204,8 +211,9 @@ export default function App() {
                       </button>
                     </div>
                     <div className="flex gap-4 overflow-x-auto no-scrollbar -mx-6 px-6 pb-4">
-                      {FLAVORS.map((flavor) => (
+                      {products.map((flavor) => (
                         <GelatoCard
+                          onAdd={() => addToCart(flavor)}
                           key={flavor.id}
                           name={flavor.name}
                           price={flavor.price}
@@ -225,8 +233,8 @@ export default function App() {
           {view === "profile" && <UserProfile />}
 
           {view === "checkout" && (
-            <div className="space-y-8 animate-in fade-in duration-500">
-              {/* CHECKOUT VIEW */}
+            <div className="space-y-8 animate-in fade-in duration-500 pb-20">
+              {/* HEADER */}
               <div>
                 <h2 className="text-3xl font-bold">Checkout</h2>
                 <p className="text-gray-500 text-sm">
@@ -234,24 +242,66 @@ export default function App() {
                 </p>
               </div>
 
+              {/* LISTA ITEM NEL CARRELLO */}
+              <section className="space-y-4">
+                <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">
+                  Your Selection
+                </h4>
+                <div className="space-y-3">
+                  {cart.length > 0 ? (
+                    cart.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between bg-white p-4 rounded-3xl shadow-sm"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-gray-100 rounded-2xl overflow-hidden">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h5 className="text-sm font-bold">{item.name}</h5>
+                            <p className="text-[10px] text-gray-400">
+                              Qty: {item.quantity}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="font-bold text-sm">
+                          €{(item.price * item.quantity).toFixed(2)}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-6 bg-white/50 rounded-3xl border-2 border-dashed border-gray-200">
+                      <p className="text-sm text-gray-400 italic">
+                        Your cart is empty 🍦
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </section>
+
               {/* SELEZIONE PAGAMENTO */}
               <section className="space-y-4">
                 <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">
                   Payment Method
                 </h4>
                 <PaymentSelection
-                  selected={"stripe"}
+                  selected={"stripe"} // Qui potresti usare uno stato [payment, setPayment]
                   onChange={(value) =>
                     console.log("Selected payment method:", value)
                   }
                 />
               </section>
 
-              {/* TOTALI */}
-              <div className="bg-white p-6 rounded-[2.5rem] space-y-3">
+              {/* TOTALI DINAMICI */}
+              <div className="bg-white p-6 rounded-[2.5rem] space-y-3 shadow-sm">
                 <div className="flex justify-between text-sm">
                   <span className="opacity-50">Subtotal</span>
-                  <span className="font-bold">€6.50</span>
+                  <span className="font-bold">€{totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="opacity-50">Delivery</span>
@@ -259,15 +309,50 @@ export default function App() {
                     Free
                   </span>
                 </div>
-                <hr className="border-dashed my-2" />
+                <hr className="border-dashed my-2 border-gray-100" />
                 <div className="flex justify-between text-xl font-bold">
                   <span className="text-[#8B2132]">Total</span>
-                  <span>€6.50</span>
+                  <span>€{totalPrice.toFixed(2)}</span>
                 </div>
               </div>
 
-              <Button className="w-full h-16 bg-[#8B2132] text-white rounded-3xl text-lg font-bold shadow-xl shadow-[#8B2132]/20">
-                Confirm Order
+              {/* TASTO ORDINE FINALE */}
+              <Button
+                disabled={cart.length === 0 || loading}
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    // Qui passiamo il carrello, il totale e una posizione fissa (o recuperata da GPS)
+                    await createOrder(
+                      cart,
+                      totalPrice,
+                      "Ombrellone #42 - Lido Tropical",
+                    );
+                    alert("Ordine inviato con successo! 🍦🚀");
+                    clearCart(); // Svuota il carrello dopo l'invio
+                    setView("menu"); // Torna alla home
+                  } catch (err: any) {
+                    alert(
+                      err.message === "Devi essere loggato per ordinare!"
+                        ? "Accedi al tuo profilo per completare l'ordine!"
+                        : "Errore durante l'ordine. Riprova.",
+                    );
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                className={`w-full h-16 bg-[#8B2132] text-white rounded-3xl text-lg font-bold shadow-xl shadow-[#8B2132]/20 transition-all active:scale-95 ${
+                  (cart.length === 0 || loading) &&
+                  "opacity-50 grayscale cursor-not-allowed"
+                }`}
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="animate-spin" /> Processing...
+                  </span>
+                ) : (
+                  "Confirm Order"
+                )}
               </Button>
             </div>
           )}
