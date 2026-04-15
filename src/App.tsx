@@ -67,58 +67,6 @@ const DesktopBlocker = () => (
   </div>
 );
 
-// Mock Data
-const FLAVORS = [
-  {
-    id: 1,
-    name: "Pistacchio di Bronte",
-    price: 4.5,
-    description:
-      "Il classico siciliano, salato al punto giusto e cremosissimo.",
-    image: "/pistacchio.jpg",
-  },
-  {
-    id: 2,
-    name: "Cipolla & Fondente",
-    price: 6.5,
-    description:
-      "L'iconico gusto di Tropea: cipolla rossa caramellata e cioccolato 70%.",
-    image: "/gelato2.jpg",
-  },
-  {
-    id: 3,
-    name: "Wild Berry",
-    price: 5.5,
-    description:
-      "Un mix di frutti di bosco selvatici raccolti sulle colline calabresi.",
-    image: "/gelato1.jpg",
-  },
-  {
-    id: 4,
-    name: "Lemon Zest",
-    price: 4.0,
-    description:
-      "Fresco e agrumato, con scorze di limone di Sicilia per un tocco in più.",
-    image: "/pistacchio.jpg",
-  },
-  {
-    id: 5,
-    name: "Salted Caramel",
-    price: 5.0,
-    description:
-      "Dolce e salato in perfetto equilibrio, con caramello fatto in casa.",
-    image: "/gelato4.jpg",
-  },
-  {
-    id: 6,
-    name: "Coffee Swirl",
-    price: 4.5,
-    description:
-      "Per gli amanti del caffè, con un intenso aroma di espresso e una spirale di cioccolato fondente.",
-    image: "/gelato1.jpg",
-  },
-];
-
 export default function App() {
   const [view, setView] = useState<View>("menu");
   const [beachDelivery, setBeachDelivery] = useState(false);

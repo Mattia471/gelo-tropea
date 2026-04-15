@@ -6,7 +6,6 @@ import {
   ChevronRight,
   Loader2,
   IceCream,
-  PlusCircle,
   Repeat,
   PackageCheck,
 } from "lucide-react";
